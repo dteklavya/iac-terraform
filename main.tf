@@ -17,7 +17,7 @@ resource "aws_instance" "web" {
   }
 }
 
-resource "aws_vpc" "main-vpc" {
+resource "aws_vpc" "prod-vpc" {
   cidr_block = "10.0.0.0/16"
 
   tags = {
@@ -25,11 +25,10 @@ resource "aws_vpc" "main-vpc" {
   }
 }
 
-resource "aws_subnet" "first-subnet" {
-    vpc_id = "${aws_vpc.main-vpc.id}"
-    cidr_block = "10.0.1.0/24"
-    
-    tags = {
-        Name = "prod-subnet"
-    }
+resource "aws_internet_gateway" "gw" {
+  vpc_id = aws_vpc.prod-vpc.id
+
+  tags = {
+    Name = "Gateway"
+  }
 }
