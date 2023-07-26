@@ -116,7 +116,7 @@ resource "aws_security_group" "allow_web" {
   }
 }
 
-# Create a network interface with an ip in the subnet
+# Create a network interface with an IP in the subnet
 resource "aws_network_interface" "web-nic" {
   subnet_id       = aws_subnet.subnet-1.id
   private_ips     = ["10.0.1.50"]
@@ -126,4 +126,12 @@ resource "aws_network_interface" "web-nic" {
   #   instance     = "${aws_instance.test.id}"
   #   device_index = 1
   # }
+}
+
+# Assign an elastic IP to the network interface
+resource "aws_eip" "web-public-ip" {
+  vpc                       = true
+  network_interface         = aws_network_interface.web-nic.id
+  associate_with_private_ip = "10.0.1.50"
+  depends_on = aws_internet_gateway.gw
 }
