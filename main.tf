@@ -138,6 +138,14 @@ resource "aws_instance" "web" {
     network_interface_id = aws_network_interface.web-nic.id
   }
 
+  user_data = <<-EOF
+              #!/bin/bash
+              sudo apt update -y
+              sudo apt install apache2 -y
+              sudo systemctl start apache2
+              sudo bash -c `echo Index page of web server. > /var/www/index.html`
+              EOF
+
   tags = {
     Name = "ubuntu-ec2-instance"
   }
