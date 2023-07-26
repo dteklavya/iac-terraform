@@ -8,16 +8,6 @@ provider "aws" {
     region = var.aws_region
 }
 
-# resource "aws_instance" "web" {
-#   ami           = "ami-0f5ee92e2d63afc18"
-#   instance_type = "t2.micro"
-
-#   tags = {
-#     Name = "first-tf-ec2-instance"
-#   }
-# }
-
-
 #  Create VPC
 resource "aws_vpc" "prod-vpc" {
   cidr_block = "10.0.0.0/16"
@@ -134,4 +124,21 @@ resource "aws_eip" "web-public-ip" {
   network_interface         = aws_network_interface.web-nic.id
   associate_with_private_ip = "10.0.1.50"
   depends_on = aws_internet_gateway.gw
+}
+
+# Create Ubuntu EC2 instance and install/enable apache2
+resource "aws_instance" "web" {
+  ami           = "ami-0f5ee92e2d63afc18"
+  instance_type = "t2.micro"
+  availability_zone = "ap-south-1"
+  key_name = "main-prod-kp"
+
+  network_interface {
+    device_index = 0
+    network_interface_id = aws_network_interface.web-nic.id
+  }
+
+  tags = {
+    Name = "ubuntu-ec2-instance"
+  }
 }
