@@ -123,7 +123,7 @@ resource "aws_eip" "web-public-ip" {
   vpc                       = true
   network_interface         = aws_network_interface.web-nic.id
   associate_with_private_ip = "10.0.1.50"
-  depends_on = aws_internet_gateway.gw
+  depends_on = [ aws_internet_gateway.gw ]
 }
 
 # Create Ubuntu EC2 instance and install/enable apache2
