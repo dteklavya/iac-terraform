@@ -49,7 +49,7 @@ resource "aws_route_table" "prod-route-table" {
 resource "aws_subnet" "subnet-1" {
   vpc_id = aws_vpc.prod-vpc.id
   cidr_block = "10.0.1.0/24"
-  availability_zone = "ap-south-1"
+  availability_zone = "ap-south-1a"
 
   tags = {
     Name = "prod-subnet"
@@ -130,7 +130,7 @@ resource "aws_eip" "web-public-ip" {
 resource "aws_instance" "web" {
   ami           = "ami-0f5ee92e2d63afc18"
   instance_type = "t2.micro"
-  availability_zone = "ap-south-1"
+  availability_zone = "ap-south-1a"
   key_name = "main-prod-kp"
 
   network_interface {
@@ -143,7 +143,7 @@ resource "aws_instance" "web" {
               sudo apt update -y
               sudo apt install apache2 -y
               sudo systemctl start apache2
-              sudo bash -c `echo Index page of web server. > /var/www/index.html`
+              sudo bash -c 'echo Index page of web server. > /var/www/index.html'
               EOF
 
   tags = {
